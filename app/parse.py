@@ -15,7 +15,12 @@ def get_last_page() -> int:
     while True:
         content = requests.get(f"https://quotes.toscrape.com/page/{count}").content
         soup = BeautifulSoup(content, "html.parser")
-        if soup.select_one("div.row:not(.header-box) > div.col-md-8").find(string=True).strip() == "No quotes found!":
+        if (
+            soup.select_one("div.row:not(.header-box) > div.col-md-8")
+            .find(string=True)
+            .strip()
+            == "No quotes found!"
+        ):
             return count - 1
         count += 1
 
