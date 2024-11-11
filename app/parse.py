@@ -4,7 +4,7 @@ import sys
 from dataclasses import dataclass
 import requests
 from bs4 import BeautifulSoup
-
+import pandas as pd
 
 @dataclass
 class Quote:
@@ -76,16 +76,18 @@ def main(output_csv_path: str) -> None:
         {
             "text": quote.text,
             "author": quote.author,
-            "tags": ", ".join(quote.tags),  # Join tags with commas for readability
+            "tags": quote.tags,
         }
         for quote in all_quotes
     ]
-
     # Write the data to CSV
-    with open(output_csv_path, "w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=["text", "author", "tags"])
-        writer.writeheader()
-        writer.writerows(data)
+    # with open(output_csv_path, "w", encoding="utf-8", newline="") as csvfile:
+    #     #     fieldnames = ["text", "author", "tags"]
+    #     #     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    #     #     writer.writeheader()
+    #     #     writer.writerows(data)'´
+    df = pd.DataFrame(data)
+    df.to_csv(output_csv_path, index=False)
 
     logging.info(f"Data saved to {output_csv_path}")
 
